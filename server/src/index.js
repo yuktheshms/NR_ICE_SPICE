@@ -530,21 +530,21 @@ app.use((error, req, res, next) => {
   res.status(500).json({ message: error.message || 'Internal server error.' });
 });
 
+
 const startServer = async () => {
   try {
-    if (isProduction && !existsSync(path.join(clientDistPath, 'index.html'))) {
-      throw new Error('Client build not found. Run the client production build before starting the server.');
-    }
     await connectDB();
     await seedDatabase();
-    server.listen(PORT, () => {
-      console.log(`NR_ICE_SPICE API running on http://localhost:${PORT}`);
+
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`NR_ICE_SPICE API running on port ${PORT}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
   }
 };
+
 
 io.on('connection', (socket) => {
   socket.on('join-room', (room) => socket.join(room));
